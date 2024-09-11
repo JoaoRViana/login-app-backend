@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,8 +46,7 @@ public class AuthController {
             newUser.setName(body.name());
             newUser.setPassword(passwordEncoder.encode(body.password()));
             this.repository.save(newUser);
-            String token = this.tokenService.generateToken(newUser);
-            return ResponseEntity.ok(new ResponseDTO(newUser.getName(), token));
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
