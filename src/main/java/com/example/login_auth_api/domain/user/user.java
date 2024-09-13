@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class user {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

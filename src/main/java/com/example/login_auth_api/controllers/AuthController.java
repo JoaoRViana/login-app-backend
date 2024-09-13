@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.login_auth_api.domain.user.user;
+import com.example.login_auth_api.domain.user.User;
 import com.example.login_auth_api.dto.LoginRequestDTO;
 import com.example.login_auth_api.dto.RegisterRequestDTO;
 import com.example.login_auth_api.dto.ResponseDTO;
-import com.example.login_auth_api.infra.security.tokenService;
-import com.example.login_auth_api.repositories.userRepository;
+import com.example.login_auth_api.infra.security.TokenService;
+import com.example.login_auth_api.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,13 +23,13 @@ import com.example.login_auth_api.repositories.userRepository;
 
 public class AuthController {
 
-    private final userRepository repository;
+    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final tokenService tokenService;
+    private final TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequestDTO body){
-        user user = this.repository.findByEmail(body.email()).orElseThrow(()->new RuntimeException("user not found"));
+        User user = this.repository.findByEmail(body.email()).orElseThrow(()->new RuntimeException("user not found"));
         if(passwordEncoder.matches(body.password(),user.getPassword())){
             String token = this.tokenService.generateToken(user);
             return ResponseEntity.ok(new ResponseDTO(user.getName(), token));
@@ -39,9 +39,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterRequestDTO body){
-        Optional<user> user = this.repository.findByEmail(body.email());
+        Optional<User> user = this.repository.findByEmail(body.email());
         if(user.isEmpty()){
-            user newUser = new user();
+            User newUser = new User();
             newUser.setEmail(body.email());
             newUser.setName(body.name());
             newUser.setPassword(passwordEncoder.encode(body.password()));

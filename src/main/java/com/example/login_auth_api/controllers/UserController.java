@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.login_auth_api.domain.user.user;
+import com.example.login_auth_api.domain.user.User;
 import com.example.login_auth_api.dto.UserRequestDTO;
-import com.example.login_auth_api.repositories.userRepository;
+import com.example.login_auth_api.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 public class UserController {
 
-    private final userRepository repository;
+    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping
@@ -32,7 +32,7 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<String>editUser(@RequestBody UserRequestDTO body){
-        user user = this.repository.findByEmail(body.email()).orElseThrow(()->new RuntimeException("user not found"));
+        User user = this.repository.findByEmail(body.email()).orElseThrow(()->new RuntimeException("user not found"));
         if(passwordEncoder.matches(body.password(), user.getPassword())){
             user.setName(body.name());
             user.setPassword(passwordEncoder.encode(body.newPassword()));
@@ -44,7 +44,7 @@ public class UserController {
 
     @DeleteMapping("/{email}")
     public ResponseEntity<String> deleteUser(@PathVariable String email) {
-        user user = this.repository.findByEmail(email)
+        User user = this.repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         repository.delete(user);
         return ResponseEntity.ok().build();
