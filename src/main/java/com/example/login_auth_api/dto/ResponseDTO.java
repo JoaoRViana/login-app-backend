@@ -1,5 +1,7 @@
 package com.example.login_auth_api.dto;
 
-public record ResponseDTO(String name,String token) {
+import com.example.login_auth_api.domain.user.UserRole;
+
+public record ResponseDTO(String name,UserRole role,String token) {
 
 }
