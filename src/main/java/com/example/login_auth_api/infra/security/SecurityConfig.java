@@ -31,14 +31,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Habilitar CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/user").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/user/{email}").permitAll()                
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Permitir OPTIONS para todas as rotas
+                        .requestMatchers(HttpMethod.DELETE, "/user/{email}").hasRole("ADMIN")             
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
