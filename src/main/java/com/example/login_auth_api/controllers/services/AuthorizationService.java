@@ -16,4 +16,6 @@ public class AuthorizationService implements UserDetailsService {
         return repository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
     }
+
+    
 }
