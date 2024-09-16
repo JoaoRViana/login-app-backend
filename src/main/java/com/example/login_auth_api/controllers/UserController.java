@@ -1,5 +1,7 @@
 package com.example.login_auth_api.controllers;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.login_auth_api.domain.user.User;
+import com.example.login_auth_api.dto.AllUsersResponseDTO;
 import com.example.login_auth_api.dto.UserRequestDTO;
 import com.example.login_auth_api.repositories.UserRepository;
 
@@ -24,11 +27,6 @@ public class UserController {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-
-    @GetMapping
-    public ResponseEntity<String> getUser(){
-        return ResponseEntity.ok("sucesso!");
-    }
 
     @PutMapping
     public ResponseEntity<String>editUser(@RequestBody UserRequestDTO body){
@@ -48,5 +46,11 @@ public class UserController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         repository.delete(user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<AllUsersResponseDTO> getAllUsers(){
+        List<User> allUsers = this.repository.findAll();
+        return ResponseEntity.ok(new AllUsersResponseDTO(allUsers));
     }
 }

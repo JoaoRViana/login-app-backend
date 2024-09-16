@@ -43,7 +43,7 @@ public class AuthController {
     public ResponseEntity register(@RequestBody RegisterRequestDTO body){
         Optional<User> user = this.repository.findByEmail(body.email());
         if(user.isEmpty()){
-             User newUser = userService.createUser(body.name(), body.email(), passwordEncoder.encode(body.password()));
+            User newUser = userService.createUser(body.name(), body.email(), passwordEncoder.encode(body.password()));
             this.repository.save(newUser);
             return ResponseEntity.ok().build();
         }
