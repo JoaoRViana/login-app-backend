@@ -12,7 +12,7 @@ public class UserService {
     public User createUser(String userName,String userEmail,String userPassword){
         User newUser = new User();
                     newUser.setEmail(userEmail);
-                    newUser.setName(userPassword);
+                    newUser.setName(userName);
                     newUser.setPassword(userPassword);
                     String admins="@admin.com";
                     if(userEmail.contains(admins)){
